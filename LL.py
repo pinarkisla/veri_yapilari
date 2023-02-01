@@ -1,9 +1,8 @@
-
 class Node:
 
     # Function to initialise the node object
     def __init__(self, bas, son):
-        self.bas = bas  
+        self.bas = bas
         self.son = son
         self.next = None
 
@@ -17,49 +16,70 @@ class LinkedList:
 
     def add_to_end(self, addr, size):
 
-        if self.head is None:
+        if self.head == None:
+            print("pk ")
             new_node = Node(addr, addr+size)
+            self.head = new_node
             return
 
-        last = self.head
-        if last.bas < addr+size :
-            new_node = Node(addr, addr+size)
-            new_node.next = self.head
-            self.head = new_node
-        else:
-            while (last.next.next):
-                if  addr >= last.son and addr+size <=last.next.bas:
+        else:    
+            last = self.head
+            while (last != None):
+                if(last.next == None):
+                    if last.bas > addr+size:
+                        new_node = Node(addr, addr+size)
+                        new_node.next = self.head
+                        self.head = new_node
+                        return
+                    elif last.bas == addr+size:
+                        last.bas = addr
+                        return
+                    elif last.son == addr:
+                        last.son = addr+size
+                        return
+                    elif last.son < addr:
+                        new_node = Node(addr, addr+size)
+                        last.next = new_node
+                        return
+                elif last.bas > addr+size:
+                    new_node = Node(addr, addr+size)
+                    new_node.next = self.head
+                    self.head = new_node
+                    return
+                elif last.bas == addr+size:
+                    last.bas = addr
+                    return
+                elif  addr >= last.son and addr+size <=last.next.bas:
                     if addr != last.son and addr+size != last.next.bas:
                         new_node = Node(addr, addr+size)
-                        new.node.next = last.next
+                        new_node.next = last.next
                         last.next = new_node
+                        return
                     elif addr == last.son and addr+size == last.next.bas:
+
                         last.son = last.next.son
                         last.next = last.next.next
-                    elif addr == last.son and addr+size != last.next.bas:
+                        return
+                    elif (addr == last.son and addr+size != last.next.bas):
                         last.son = addr+size
+                        return
+                    elif addr != last.son and addr+size == last.next.bas:
+                        last.next.bas = addr
+                        return
                     else:
-                        last.next.bas = addr+size
+                        print("Araya eleman eklemede hata")
+                        return
                 else:
                     last = last.next
-                    
-            if addr == last.next.son:
-                last.next.son = addr+size
-            else:
-                new_node = Node(addr, addr+size)
-                last.next.next = new_node
-
-
-
 
     def printList(self):
         temp = self.head
         while (temp):
-            print(temp.data,end=" ")
+            print("(", temp.bas,"-", temp.son, ")", end=" ")
             temp = temp.next
-
+        print()
     
-    def deleteNode(self, position):
+    def delete_node(self, position):
         temp = self.head
         prev = self.head
         
@@ -67,42 +87,26 @@ class LinkedList:
             if i == 0 and position == 1:
                 self.head = temp.next
             else:
-                if i == position -1 and temp is not None:
+                if i == position -1 and temp != None:
                     prev.next = temp.next
                 else:
                     prev = temp
                     if prev == None:
                         break
                     temp = temp.next
-            
-    
+
 # Code execution starts here
 if __name__ == '__main__':
 
     # Start with the empty list
     llist = LinkedList()
 
-    llist.add_to_begining(1)
-    llist.add_to_begining(2)
-    print("After insertion at head:", end=" ")
+    llist.add_to_end(900, 5)
+    llist.add_to_end(912, 2)
+    llist.add_to_end(906, 2)
+    llist.add_to_end(914, 1)
+    llist.add_to_end(890, 5)
+    llist.printList()
+    llist.delete_node(3)
     llist.printList()
     print()
-
-    llist.add_to_end(4)
-    llist.add_to_end(5)
-    print("After insertion at tail:", end=" ")
-    llist.printList()
-    print()
-
-    print("After deletion at head:", end=" ")
-    llist.deleteNode(1)
-    llist.printList()
-    print()
-    
-    
-    print("After deletion at 2:", end=" ")
-    llist.deleteNode(2)
-    llist.printList()
-
-    
-    
