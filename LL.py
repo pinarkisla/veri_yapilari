@@ -17,7 +17,6 @@ class LinkedList:
     def add_to_end(self, addr, size):
 
         if self.head == None:
-            print("pk ")
             new_node = Node(addr, addr+size)
             self.head = new_node
             return
@@ -79,21 +78,44 @@ class LinkedList:
             temp = temp.next
         print()
     
-    def delete_node(self, position):
-        temp = self.head
-        prev = self.head
+    def delete_node(self, addr, size):
         
-        for i in range(0, position):
-            if i == 0 and position == 1:
-                self.head = temp.next
-            else:
-                if i == position -1 and temp != None:
-                    prev.next = temp.next
+        if None == self.head:
+            print("Silinecek adres yok")
+            return
+        
+        last = self.head
+        prev = self.head
+        while(last != None):
+            if addr+size < last.bas:
+                return
+            elif addr >= last.bas and addr+size <= last.son:
+                if addr == last.bas and addr+size == last.son:
+                    if prev == last:
+                        #prev = last.next
+                        self.head = last.next
+                        return
+                    else:
+                        prev.next = last.next
+                        return
+                elif addr > last.bas and addr+size < last.son:
+                    new_node = Node(addr+size, last.son)
+                    last.son = addr
+                    new_node.next = last.next
+                    last.next = new_node
+                    return
+                elif addr == last.bas and addr+size < last.son:
+                    last.bas = addr + size
+                    return
+                elif addr > last.bas and addr+size == last.son:
+                    last.son = addr
+                    return
                 else:
-                    prev = temp
-                    if prev == None:
-                        break
-                    temp = temp.next
+                    return
+            else:
+                prev = last
+                last = last.next
+                    
 
 # Code execution starts here
 if __name__ == '__main__':
@@ -107,6 +129,12 @@ if __name__ == '__main__':
     llist.add_to_end(914, 1)
     llist.add_to_end(890, 5)
     llist.printList()
-    llist.delete_node(3)
+    llist.delete_node(890, 5)
+    llist.printList()
+    llist.delete_node(901, 2)
+    llist.printList()
+    llist.delete_node(912, 3)
+    llist.printList()
+    llist.add_to_end(912, 5)
     llist.printList()
     print()
