@@ -14,7 +14,14 @@ class LinkedList:
     def __init__(self):
         self.head = None
 
-    def add_to_end(self, addr, size):
+    def print_list(self):
+        temp = self.head
+        while (temp):
+            print("(", temp.bas,"-", temp.son, ")", end=" ")
+            temp = temp.next
+        print()
+
+    def release_memory(self, addr, size):
 
         if self.head == None:
             new_node = Node(addr, addr+size)
@@ -70,15 +77,8 @@ class LinkedList:
                         return
                 else:
                     last = last.next
-
-    def printList(self):
-        temp = self.head
-        while (temp):
-            print("(", temp.bas,"-", temp.son, ")", end=" ")
-            temp = temp.next
-        print()
     
-    def delete_node(self, addr, size):
+    def allocate_with_addr(self, addr, size):
         
         if None == self.head:
             print("Silinecek adres yok")
@@ -115,7 +115,26 @@ class LinkedList:
             else:
                 prev = last
                 last = last.next
-                    
+    
+   
+    def allocate_with_size(self, size):
+        prev = self.head
+        last = self.head
+        fit = self.head
+
+        while(last):
+            if((last.son - last.bas) == size):
+                if(prev == last):
+                    self.head = last.next
+                    return
+                else:
+                    prev.next = last.next
+                    return
+            elif((last.son - last.bas) < (fit.son - fit.bas)):
+                fit = last
+            last = last.next   
+
+        fit.bas += size                
 
 # Code execution starts here
 if __name__ == '__main__':
@@ -123,18 +142,24 @@ if __name__ == '__main__':
     # Start with the empty list
     llist = LinkedList()
 
-    llist.add_to_end(900, 5)
-    llist.add_to_end(912, 2)
-    llist.add_to_end(906, 2)
-    llist.add_to_end(914, 1)
-    llist.add_to_end(890, 5)
-    llist.printList()
-    llist.delete_node(890, 5)
-    llist.printList()
-    llist.delete_node(901, 2)
-    llist.printList()
-    llist.delete_node(912, 3)
-    llist.printList()
-    llist.add_to_end(912, 5)
-    llist.printList()
+    llist.release_memory(900, 5)
+    llist.release_memory(912, 2)
+    llist.release_memory(906, 2)
+    llist.release_memory(914, 1)
+    llist.release_memory(890, 5)
+    llist.print_list()
+    llist.allocate_with_addr(890, 5)
+    llist.print_list()
+    llist.allocate_with_addr(901, 2)
+    llist.print_list()
+    llist.allocate_with_addr(912, 3)
+    llist.print_list()
+    llist.release_memory(912, 5)
+    llist.print_list()
+    llist.allocate_with_size(1)
+    llist.print_list()
+    llist.allocate_with_size(1)
+    llist.print_list()
+
+
     print()
